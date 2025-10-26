@@ -27,81 +27,77 @@ This function should only modify configuration layer settings."
    dotspacemacs-ask-for-lazy-installation t
 
    ;; List of additional paths where to look for configuration layers.
-   ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
+   ;; Paths must have a trailing slash (i.e. "~/.mycontribs/")
    dotspacemacs-configuration-layer-path '()
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(javascript
-     lua
-     eww
-     sql
-     ;; ----------------------------------------------------------------
+   '(;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      (auto-completion :variables
-                      auto-completion-enable-snippets-in-popup t)
+                      auto-completion-enable-snippets-in-popup t
+                      auto-completion-enable-help-tooltip t
+                      auto-completion-return-key-behavior 'complete
+                      auto-completion-tab-key-behavior 'cycle
+                      auto-completion-complete-with-key-sequence nil)
+     protobuf
      better-defaults
-     (python :variables
-             python-backend 'anaconda
-             python-fill-column 99
-             python-formatter 'yapf
-             python-lsp-server 'pyright)
      emacs-lisp
      git
-     (translate :variables
-                translate-enable-highlight nil
-                ;; translate-reference-buffer-read-only t
-                gts-translate-list '(("en" "ru")))
-     ;; helm
-     (cmake :variables
-            cmake-backend 'lsp
-            cmake-enable-cmake-ide-support t)
-     lsp
-     ;; (sql :variables
-     ;;      sql-backend 'lsp
-     ;;      lsp-sqls-connections '((driver . "postgresql") (dataSourceName . "host=127.0.0.1 port=5432 user=postgres password=.CricDeb6 dbname=postgres sslmode=disable"))
-     ;;      lsp-sqls-workspace-config-path nil)
+     helm
      markdown
      multiple-cursors
-     (c-c++ :variables
-            ;; c-c++-backend 'lsp-ccls
-            c-c++-enable-clang-support t
-            c-c++-backend 'lsp-clangd
-            lsp-clients-clangd-executable "/usr/bin/clangd-12"
-            c-c++-default-mode-for-headers 'c-or-c++-mode)
-     (ranger :variables
-             ranger-show-preview t
-             ranger-show-hidden t
-             ranger-cleanup-eagerly t
-             ranger-cleanup-on-disable t
-             ranger-ignored-extensions '("mkv" "flv" "iso" "mp4"))
-     (org :variables
-          org-todo-dependencies-strategy 'naive-auto
-          org-enable-notifications t
-          org-start-notification-daemon-on-startup t
-          org-agenda-files (list "~/org/work.org"
-                                 "~/org/notes.org"))
-     (json :variables
-           json-backend 'lsp
-           json-fmt-tool 'web-beautify)
+     org
+     syntax-checking
+     treemacs
+     themes-megapack
+     imenu-list
+     dap
      (shell :variables
-            shell-default-shell 'vterm
-            shell-default-height 20
-            shell-default-position 'bottom)
-     ;; spell-checking
-     ;; syntax-checking
-     ;; version-control
-     treemacs)
-
-   ;; (add-hook 'sql-mode-hook 'lsp)
-   ;; (setq lsp-sqls-workspace-config-path nil)
-   ;; (setq lsp-sqls-connections
-         ;; '(((driver . "mysql") (dataSourceName . "yyoncho:local@tcp(localhost:3306)/foo"))
-         ;;  ((driver . "mssql") (dataSourceName . "Server=localhost;Database=sammy;User Id=yyoncho;Password=hunter2;"))
-         ;;  '((driver . "postgresql") (dataSourceName . "host=127.0.0.1 port=5432 user=postgres password=.CricDeb6 dbname=postgres sslmode=disable")))
+            shell-default-shell 'eshell
+            shell-default-position 'bottom
+            shell-default-height 30
+            shell-enable-smart-eshell t
+            )
+     (spell-checking :variables
+                     spell-checking-enable-auto-dictionary t
+                     spell-checking-enable-by-default nil)
+     (lsp :variables
+          lsp-c++-server 'clangd
+          lsp-clients-clangd-executable "/usr/bin/clangd"  ; или полный путь
+          lsp-clients-clangd-args '("--background-index"
+                                    "--clang-tidy"
+                                    "--completion-style=detailed"
+                                    "--header-insertion=never"
+                                    "--pch-storage=memory"
+                                    "--log=error")
+          lsp-auto-configure t
+          lsp-auto-require-clients nil
+          lsp-enable-snippet t
+          lsp-enable-indentation t
+          lsp-enable-symbol-highlighting t
+          lsp-ui-doc-enable t
+          lsp-ui-sideline-enable t
+          )
+     (cmake :variables
+            cmake-backend 'lsp
+            cmake-enable-cmake-ide-support t
+            )
+     (c-c++ :variables
+            c-c++-default-mode-for-headers 'c++-mode
+            c-c++-formatter-indent-line t
+            c-c++-enable-clang-support t
+            c-c++-enable-cmake-support t
+            c-c++-lsp-enable-semantic-highlight 'rainbow
+            c-c++-backend 'lsp-clangd
+            ;; c-c++-formatter-indent-line t
+            c-c++-dap-adapters '(dap-lldb dap-cpptools)
+            c-c++-enable-auto-format-on-save t
+            )
+     )
 
    ;; List of additional packages that will be installed without being wrapped
    ;; in a layer (generally the packages are installed only and should still be
@@ -111,16 +107,9 @@ This function should only modify configuration layer settings."
    ;; `dotspacemacs/user-config'. To use a local version of a package, use the
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(graphql-mode
-                                      ng2-mode
-                                      all-the-icons
-                                      all-the-icons-dired
-                                      eslint-fix
-                                      prettier-js
-                                      racer
-                                      circe
-                                      gruvbox-theme
-                                      go-translate)
+   dotspacemacs-additional-packages '(
+                                      catppuccin-theme
+                                      )
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -145,37 +134,6 @@ It should only modify the values of Spacemacs settings."
   ;; This setq-default sexp is an exhaustive list of all the supported
   ;; spacemacs settings.
   (setq-default
-   ;; If non-nil then enable support for the portable dumper. You'll need to
-   ;; compile Emacs 27 from source following the instructions in file
-   ;; EXPERIMENTAL.org at to root of the git repository.
-   ;;
-   ;; WARNING: pdumper does not work with Native Compilation, so it's disabled
-   ;; regardless of the following setting when native compilation is in effect.
-   ;;
-   ;; (default nil)
-   dotspacemacs-enable-emacs-pdumper nil
-
-   ;; Name of executable file pointing to emacs 27+. This executable must be
-   ;; in your PATH.
-   ;; (default "emacs")
-   dotspacemacs-emacs-pdumper-executable-file "emacs"
-
-   ;; Name of the Spacemacs dump file. This is the file will be created by the
-   ;; portable dumper in the cache directory under dumps sub-directory.
-   ;; To load it when starting Emacs add the parameter `--dump-file'
-   ;; when invoking Emacs 27.1 executable on the command line, for instance:
-   ;;   ./emacs --dump-file=$HOME/.emacs.d/.cache/dumps/spacemacs-27.1.pdmp
-   ;; (default (format "spacemacs-%s.pdmp" emacs-version))
-   dotspacemacs-emacs-dumper-dump-file (format "spacemacs-%s.pdmp" emacs-version)
-
-   ;; If non-nil ELPA repositories are contacted via HTTPS whenever it's
-   ;; possible. Set it to nil if you have no way to use HTTPS in your
-   ;; environment, otherwise it is strongly recommended to let it set to t.
-   ;; This variable has no effect if Emacs is launched with the parameter
-   ;; `--insecure' which forces the value of this variable to nil.
-   ;; (default t)
-   dotspacemacs-elpa-https t
-
    ;; Maximum allowed time in seconds to contact an ELPA repository.
    ;; (default 5)
    dotspacemacs-elpa-timeout 5
@@ -198,7 +156,7 @@ It should only modify the values of Spacemacs settings."
    ;; latest version of packages from MELPA. Spacelpa is currently in
    ;; experimental state please use only for testing purposes.
    ;; (default nil)
-   dotspacemacs-use-spacelpa t
+   dotspacemacs-use-spacelpa nil
 
    ;; If non-nil then verify the signature for downloaded Spacelpa archives.
    ;; (default t)
@@ -266,7 +224,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-startup-buffer-multi-digit-delay 0.4
 
    ;; If non-nil, show file icons for entries and headings on Spacemacs home buffer.
-   ;; This has no effect in terminal or if "all-the-icons" package or the font
+   ;; This has no effect in terminal or if "nerd-icons" package or the font
    ;; is not installed. (default nil)
    dotspacemacs-startup-buffer-show-icons nil
 
@@ -292,9 +250,15 @@ It should only modify the values of Spacemacs settings."
 
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
-   ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
-                         spacemacs-light)
+   ;; with 2 themes variants, one dark and one light). A theme from external
+   ;; package can be defined with `:package', or a theme can be defined with
+   ;; `:location' to download the theme package, refer the themes section in
+   ;; DOCUMENTATION.org for the full theme specifications.
+   ;; dotspacemacs-themes '(spacemacs-dark
+   ;;                       catppuccin
+   ;;                       spacemacs-light)
+
+   dotspacemacs-themes '(catppuccin)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -309,13 +273,18 @@ It should only modify the values of Spacemacs settings."
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
 
-   ;; Default font or prioritized list of fonts. The `:size' can be specified as
+   ;; Default font or prioritized list of fonts. This setting has no effect when
+   ;; running Emacs in terminal. The font set here will be used for default and
+   ;; fixed-pitch faces. The `:size' can be specified as
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 12.0
+                               :size 10.0
                                :weight normal
                                :width normal)
+
+   ;; Default icons font, it can be `all-the-icons' or `nerd-icons'.
+   dotspacemacs-default-icons-font 'all-the-icons
 
    ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
@@ -336,10 +305,10 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-major-mode-leader-key ","
 
    ;; Major mode leader key accessible in `emacs state' and `insert state'.
-   ;; (default "C-M-m" for terminal mode, "<M-return>" for GUI mode).
+   ;; (default "C-M-m" for terminal mode, "M-<return>" for GUI mode).
    ;; Thus M-RET should work as leader key in both GUI and terminal modes.
    ;; C-M-m also should work in terminal mode, but not in GUI mode.
-   dotspacemacs-major-mode-emacs-leader-key (if window-system "<M-return>" "C-M-m")
+   dotspacemacs-major-mode-emacs-leader-key (if window-system "M-<return>" "C-M-m")
 
    ;; These variables control whether separate commands are bound in the GUI to
    ;; the key pairs `C-i', `TAB' and `C-m', `RET'.
@@ -390,6 +359,10 @@ It should only modify the values of Spacemacs settings."
    ;; Which-key frame position. Possible values are `right', `bottom' and
    ;; `right-then-bottom'. right-then-bottom tries to display the frame to the
    ;; right; if there is insufficient space it displays it at the bottom.
+   ;; It is also possible to use a posframe with the following cons cell
+   ;; `(posframe . position)' where position can be one of `center',
+   ;; `top-center', `bottom-center', `top-left-corner', `top-right-corner',
+   ;; `top-right-corner', `bottom-left-corner' or `bottom-right-corner'
    ;; (default 'bottom)
    dotspacemacs-which-key-position 'bottom
 
@@ -399,6 +372,22 @@ It should only modify the values of Spacemacs settings."
    ;; displays the buffer in a same-purpose window even if the buffer can be
    ;; displayed in the current window. (default nil)
    dotspacemacs-switch-to-buffer-prefers-purpose nil
+
+   ;; Whether side windows (such as those created by treemacs or neotree)
+   ;; are kept or minimized by `spacemacs/toggle-maximize-window' (SPC w m).
+   ;; (default t)
+   dotspacemacs-maximize-window-keep-side-windows t
+
+   ;; If nil, no load-hints enabled. If t, enable the `load-hints' which will
+   ;; put the most likely path on the top of `load-path' to reduce walking
+   ;; through the whole `load-path'. It's an experimental feature to speedup
+   ;; Spacemacs on Windows. Refer the FAQ.org "load-hints" session for details.
+   dotspacemacs-enable-load-hints nil
+
+   ;; If t, enable the `package-quickstart' feature to avoid full package
+   ;; loading, otherwise no `package-quickstart' attemption (default nil).
+   ;; Refer the FAQ.org "package-quickstart" section for details.
+   dotspacemacs-enable-package-quickstart nil
 
    ;; If non-nil a progress bar is displayed when spacemacs is loading. This
    ;; may increase the boot time on some systems and emacs builds, set it to
@@ -415,12 +404,12 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
-   ;; (default nil) (Emacs 24.4+ only)
+   ;; (default t) (Emacs 24.4+ only)
    dotspacemacs-maximized-at-startup t
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
-   ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
-   ;; borderless fullscreen. (default nil)
+   ;; variable with `dotspacemacs-maximized-at-startup' to obtain fullscreen
+   ;; without external boxes. Also disables the internal border. (default nil)
    dotspacemacs-undecorated-at-startup nil
 
    ;; A value from the range (0..100), in increasing opacity, which describes
@@ -465,18 +454,18 @@ It should only modify the values of Spacemacs settings."
    ;; but only visual lines are counted. For example, folded lines will not be
    ;; counted and wrapped lines are counted as multiple lines.
    ;; This variable can also be set to a property list for finer control:
-   dotspacemacs-line-numbers '(:relative t
-      :visual t
-      :disabled-for-modes dired-mode
-                          doc-view-mode
-                          markdown-mode
-                          org-mode
-                          pdf-view-mode
-                          text-mode
-      :size-limit-kb 1000)
+   ;; '(:relative nil
+   ;;   :visual nil
+   ;;   :disabled-for-modes dired-mode
+   ;;                       doc-view-mode
+   ;;                       markdown-mode
+   ;;                       org-mode
+   ;;                       pdf-view-mode
+   ;;                       text-mode
+   ;;   :size-limit-kb 1000)
    ;; When used in a plist, `visual' takes precedence over `relative'.
    ;; (default nil)
-   
+   dotspacemacs-line-numbers 'relative
 
    ;; Code folding method. Possible values are `evil', `origami' and `vimish'.
    ;; (default 'evil)
@@ -517,9 +506,16 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-persistent-server nil
 
    ;; List of search tool executable names. Spacemacs uses the first installed
-   ;; tool of the list. Supported tools are `rg', `ag', `pt', `ack' and `grep'.
-   ;; (default '("rg" "ag" "pt" "ack" "grep"))
-   dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
+   ;; tool of the list. Supported tools are `rg', `ag', `ack' and `grep'.
+   ;; (default '("rg" "ag" "ack" "grep"))
+   dotspacemacs-search-tools '("rg" "ag" "ack" "grep")
+
+   ;; The backend used for undo/redo functionality. Possible values are
+   ;; `undo-fu', `undo-redo' and `undo-tree' see also `evil-undo-system'.
+   ;; Note that saved undo history does not get transferred when changing
+   ;; your undo system. The default is currently `undo-fu' as `undo-tree'
+   ;; is not maintained anymore and `undo-redo' is very basic."
+   dotspacemacs-undo-system 'undo-fu
 
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'
@@ -556,6 +552,9 @@ It should only modify the values of Spacemacs settings."
    ;; to aggressively delete empty line and long sequences of whitespace,
    ;; `trailing' to delete only the whitespace at end of lines, `changed' to
    ;; delete only whitespace for changed lines or `nil' to disable cleanup.
+   ;; The variable `global-spacemacs-whitespace-cleanup-modes' controls
+   ;; which major modes have whitespace cleanup enabled or disabled
+   ;; by default.
    ;; (default nil)
    dotspacemacs-whitespace-cleanup nil
 
@@ -599,7 +598,7 @@ default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
   (spacemacs/load-spacemacs-env)
-)
+  )
 
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
@@ -607,17 +606,8 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  (add-hook 'hack-local-variables-hook (lambda () (setq truncate-lines t)))
 
-
-)
-
-(defun dotspacemacs/user-load ()
-  "Library to load while dumping.
-This function is called only while dumping Spacemacs configuration. You can
-`require' or `load' the libraries of your choice that will be included in the
-dump."
-)
+  )
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -625,38 +615,36 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-  (require 'fancy-battery)
-  (add-hook 'after-init-hook #'fancy-battery-mode)
-  (require 'org-projectile)
-  (org-projectile-per-project)
-  (setq org-projectile-per-project-filepath "TODOs.org")
-  (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
-  (global-set-key (kbd "C-c c") 'org-capture)
-  (global-set-key (kbd "C-c n p") 'org-projectile-project-todo-completing-read)
-  ;; (setq org-agenda-files
-  ;;      (append
-  ;;      (file-expand-wildcards "~/Develop/Python/noteficator/*.org")))
-  ;; Bind clang-format-region to C-M-tab in all modes:
-  (global-set-key [C-M-tab] 'clang-format-region)
-  ;; Bind clang-format-buffer to tab on the c++-mode only:
-  (add-hook 'c++-mode-hook 'clang-format-bindings)
-  (defun clang-format-bindings ()
-    (define-key c++-mode-map [tab] 'clang-format-buffer))
+
+  (global-unset-key (kbd "<f2>"))
+  (global-unset-key (kbd "<f4>"))
 
 
-  ;;go-translate
-  (require 'go-translate)
-  ;;go-translate list declared languages
-  (setq gts-translate-list '(("en" "ru")))
-  ;;go-translate engine
-  (setq gts-default-translator
-        (gts-translator
-         :picker (gts-prompt-picker)
-         :engines (list (gts-bing-engine) (gts-google-engine))
-         :render (gts-buffer-render)))
+  ;; Привязать F2 к переходу к определению через LSP
+  (global-set-key (kbd "<f2>") 'lsp-find-definition)
+
+  ;; ;; Дополнительные полезные привязки для C++
+  ;; (global-set-key (kbd "S-<f2>") 'lsp-find-references)     ; Shift-F2 - найти использования
+  ;; (global-set-key (kbd "C-<f2>") 'lsp-find-implementation) ; Ctrl-F2 - найти реализацию
+  ;; (global-set-key (kbd "M-<f2>") 'lsp-rename)              ; Alt-F2 - переименование
+
+  ;; Привязать F4 к переключению между заголовочным и исходным файлом
+  (global-set-key (kbd "<f4>") 'ff-find-other-file)
+
+  ;; ;; Дополнительные привязки
+  ;; (global-set-key (kbd "S-<f4>") 'ff-find-other-file-other-window) ; в другом окне
+  ;; (global-set-key (kbd "C-<f4>") 'projectile-find-other-file)      ; через projectile
+
+  (defun my/compilation-autoclose (buffer string)
+    "Closes the compilation window if compilation is successful."
+    (when (string-match-p "finished" string) ;; Check for successful completion message
+      (message "Compilation successful: closing window.")
+      (run-with-timer 1 nil 'delete-window (get-buffer-window buffer t))))
 
 
-)
+  (setq compilation-finish-functions '(my/compilation-autoclose))
+
+  )
 
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -666,28 +654,62 @@ before packages are loaded."
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(org-agenda-files
-   '("/home/gavrilov_vv/org/work.org" "/home/gavrilov_vv/org/notes.org" "/home/gavrilov_vv/Develop/Python/noteficator/TODOs.org"))
- '(package-selected-packages
-   '(battery-notifier fancy-narrow add-node-modules-path counsel-gtags counsel swiper ivy ggtags helm-gtags impatient-mode import-js grizzl js-doc js2-refactor multiple-cursors livid-mode nodejs-repl npm-mode prettier-js skewer-mode js2-mode simple-httpd tern web-beautify elpy yasnippet-snippets yapfify ws-butler writeroom-mode winum which-key volatile-highlights vim-powerline vi-tilde-fringe uuidgen use-package unfill undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil toc-org term-cursor symon symbol-overlay string-inflection string-edit sql-indent sphinx-doc spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline-all-the-icons space-doc restart-emacs request ranger rainbow-delimiters quickrun pytest pylookup pyenv-mode pydoc py-isort popwin poetry pippel pipenv pip-requirements pcre2el password-generator paradox overseer org-wild-notifier org-superstar org-rich-yank org-projectile org-present org-pomodoro org-mime org-download org-contrib org-cliplink open-junk-file nose nameless mwim multi-line mmm-mode markdown-toc macrostep lsp-ui lsp-treemacs lsp-python-ms lsp-pyright lsp-origami lorem-ipsum live-py-mode link-hint inspector info+ indent-guide importmagic hybrid-mode hungry-delete htmlize holy-mode hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-xref helm-themes helm-swoop helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-descbinds helm-ctest helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gh-md fuzzy font-lock+ flycheck-pos-tip flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-evilified-state evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav elisp-def editorconfig dumb-jump drag-stuff dotenv-mode dired-quick-sort diminish devdocs define-word cython-mode company-lua company-anaconda column-enforce-mode code-cells cmake-mode cmake-ide clean-aindent-mode centered-cursor-mode blacken auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line ac-ispell))
- '(warning-suppress-log-types '((use-package) (use-package)))
- '(warning-suppress-types
-   '((use-package)
-     (use-package)
-     (use-package)
-     (use-package)
-     (use-package))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-)
-
-
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(package-selected-packages
+     '(0blayout ac-html ace-link aggressive-indent all-the-icons auto-compile
+                auto-dictionary auto-highlight-symbol auto-yasnippet
+                avy-jump-helm-line catppuccin-theme centered-cursor-mode
+                clean-aindent-mode cmake-ide cmake-mode code-review
+                column-enforce-mode company-c-headers cpp-auto-include dap-mode
+                define-word devdocs diminish dired-quick-sort disable-mouse
+                disaster dotenv-mode drag-stuff dumb-jump edit-indirect elisp-def
+                elisp-demos elisp-slime-nav emr eval-sexp-fu evil-anzu evil-args
+                evil-cleverparens evil-collection evil-easymotion evil-escape
+                evil-evilified-state evil-exchange evil-goggles evil-iedit-state
+                evil-indent-plus evil-lion evil-lisp-state evil-matchit evil-mc
+                evil-nerd-commenter evil-numbers evil-org evil-surround
+                evil-textobj-line evil-tutor evil-unimpaired evil-visual-mark-mode
+                evil-visualstar expand-region eyebrowse fancy-battery
+                flycheck-elsa flycheck-package flycheck-pos-tip
+                flyspell-correct-helm gendoxy gh-md git-link git-messenger
+                git-modes git-timemachine gitignore-templates glab
+                gnu-elpa-keyring-update gnuplot golden-ratio google-c-style
+                google-translate helm-ag helm-c-yasnippet helm-comint helm-company
+                helm-ctest helm-descbinds helm-ls-git helm-lsp helm-make
+                helm-mode-manager helm-org helm-org-rifle helm-projectile
+                helm-purpose helm-swoop helm-xref hide-comnt highlight-indentation
+                highlight-numbers highlight-parentheses hl-todo holy-mode htmlize
+                hungry-delete hybrid-mode indent-guide info+ inspector link-hint
+                lorem-ipsum lsp-origami lsp-ui macrostep markdown-toc multi-line
+                mwim nameless open-junk-file org-cliplink org-contrib org-download
+                org-mime org-pomodoro org-present org-projectile org-rich-yank
+                org-superstar orgit-forge overseer page-break-lines paradox
+                password-generator pcre2el popwin quickrun rainbow-delimiters
+                restart-emacs smeargle space-doc spaceline
+                spacemacs-purpose-popwin spacemacs-whitespace-cleanup
+                string-edit-at-point string-inflection symbol-overlay symon
+                term-cursor toc-org treemacs-evil treemacs-icons-dired
+                treemacs-magit treemacs-persp treemacs-projectile undo-fu
+                undo-fu-session unfill vi-tilde-fringe volatile-highlights vundo
+                wgrep winum writeroom-mode ws-butler yasnippet-snippets))
+   '(safe-local-variable-values
+     '((cmake-ide-build-dir . "~/Develop/ktrsvr/build")
+       (cmake-ide-project-dir . "~/Develop/ktrsvr") (helm-make-arguments . "-j16")
+       (helm-make-build-dir . "build")
+       (cmake-ide-cmake-opts
+        . "-DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON")
+       (cmake-ide-build-dir . "~/Develop/apd/build")
+       (cmake-ide-project-dir . "~/Develop/apd")
+       (lsp-clients-clangd-args "--compile-commands-dir=build"
+                                "--pch-storage=memory" "--background-index" "-j=4"))))
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   )
+  )
