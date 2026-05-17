@@ -1,0 +1,431 @@
+;; -*- mode: emacs-lisp; lexical-binding: t -*-
+(defun dotspacemacs/layers ()
+  (setq-default
+   dotspacemacs-distribution 'spacemacs
+
+   dotspacemacs-enable-lazy-installation 'unused
+
+   dotspacemacs-ask-for-lazy-installation t
+
+   dotspacemacs-configuration-layer-path '()
+
+   dotspacemacs-configuration-layers
+   '((auto-completion :variables
+                      auto-completion-enable-snippets-in-popup t
+                      auto-completion-enable-help-tooltip t
+                      auto-completion-return-key-behavior 'complete
+                      auto-completion-enable-sort-by-usage t
+                      auto-completion-tab-key-behavior 'cycle
+                      auto-completion-complete-with-key-sequence nil)
+     (rust :variables
+           lsp-rust-analyzer-cargo-auto-reload t
+           rust-backend 'lsp
+           lsp-rust-server 'rust-analyzer
+           rustic-format-on-save t)
+     toml
+     better-defaults
+     emacs-lisp
+     git
+     protobuf
+     helm
+     markdown
+     multiple-cursors
+     org
+     syntax-checking
+     treemacs
+     themes-megapack
+     imenu-list
+     json
+     dap
+     (shell :variables
+            shell-default-shell 'eshell
+            shell-default-position 'bottom
+            shell-default-height 30
+            shell-enable-smart-eshell t
+            )
+     (spell-checking :variables
+                     spell-checking-enable-auto-dictionary t
+                     spell-checking-enable-by-default nil)
+     (lsp :variables
+          lsp-c++-server 'clangd
+          lsp-clients-clangd-executable "/usr/bin/clangd"  ; или полный путь
+          lsp-clients-clangd-args '("--background-index"
+                                    "--compile-commands-dir=build"
+                                    "--clang-tidy"
+                                    "--completion-style=detailed"
+                                    "--header-insertion=never"
+                                    "-j=8"
+                                    "--pch-storage=memory"
+                                    "--log=error")
+          lsp-auto-configure t
+          lsp-auto-require-clients t
+          lsp-completion-enable-snippets t
+          lsp-enable-snippet t
+          lsp-enable-indentation nil
+          lsp-enable-symbol-highlighting t
+          lsp-idle-delay 0.2
+          lsp-ui-doc-enable t
+          lsp-ui-sideline-enable t
+          )
+     (cmake :variables
+            cmake-backend 'company-cmake
+            cmake-enable-cmake-ide-support t
+            )
+     (c-c++ :variables
+            c-c++-default-mode-for-headers 'c++-mode
+            c-c++-enable-clang-format-on-save t
+            c-c++-enable-clang-support t
+            c-c++-dap-adapters '(dap-lldb dap-cpptools)
+            )
+     )
+
+   dotspacemacs-additional-packages '(sqlite3
+                                      catppuccin-theme
+                                      shift-text
+                                      srefactor)
+
+   dotspacemacs-frozen-packages '()
+
+   dotspacemacs-excluded-packages '()
+
+   dotspacemacs-install-packages 'used-only))
+
+(defun dotspacemacs/init ()
+  (setq-default
+
+   dotspacemacs-elpa-timeout 5
+
+   dotspacemacs-gc-cons '(100000000 0.1)
+
+   dotspacemacs-read-process-output-max (* 1024 1024)
+
+   dotspacemacs-use-spacelpa nil
+
+   dotspacemacs-verify-spacelpa-archives t
+
+   dotspacemacs-check-for-update nil
+
+   dotspacemacs-elpa-subdirectory 'emacs-version
+
+   dotspacemacs-editing-style 'vim
+
+   dotspacemacs-startup-buffer-show-version t
+
+   dotspacemacs-startup-banner 'official
+
+   dotspacemacs-startup-banner-scale 'auto
+
+   dotspacemacs-startup-lists '((recents . 5)
+                                (projects . 7))
+
+   dotspacemacs-startup-buffer-responsive t
+
+   dotspacemacs-show-startup-list-numbers t
+
+   dotspacemacs-startup-buffer-multi-digit-delay 0.4
+
+   dotspacemacs-startup-buffer-show-icons nil
+
+   dotspacemacs-new-empty-buffer-major-mode 'text-mode
+
+   dotspacemacs-scratch-mode 'text-mode
+
+   dotspacemacs-scratch-buffer-persistent nil
+
+   dotspacemacs-scratch-buffer-unkillable nil
+
+   dotspacemacs-initial-scratch-message nil
+
+   dotspacemacs-themes '(catppuccin)
+
+   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.5)
+
+   dotspacemacs-colorize-cursor-according-to-state t
+
+   dotspacemacs-default-font '("JetBrainsMono Nerd Font"
+                               :size 12.0
+                               :weight normal
+                               :width normal)
+
+   dotspacemacs-default-icons-font 'all-the-icons
+
+   dotspacemacs-leader-key "SPC"
+
+   dotspacemacs-emacs-command-key "SPC"
+
+   dotspacemacs-ex-command-key ":"
+
+   dotspacemacs-emacs-leader-key "M-m"
+
+   dotspacemacs-major-mode-leader-key ","
+
+   dotspacemacs-major-mode-emacs-leader-key (if window-system "M-<return>" "C-M-m")
+
+   dotspacemacs-distinguish-gui-tab nil
+
+   dotspacemacs-default-layout-name "Default"
+
+   dotspacemacs-display-default-layout nil
+
+   dotspacemacs-auto-resume-layouts nil
+
+   dotspacemacs-auto-generate-layout-names nil
+
+   dotspacemacs-large-file-size 1
+
+   dotspacemacs-auto-save-file-location 'cache
+
+   dotspacemacs-max-rollback-slots 5
+
+   dotspacemacs-enable-paste-transient-state nil
+
+   dotspacemacs-which-key-delay 0.4
+
+   dotspacemacs-which-key-position 'bottom
+
+   dotspacemacs-switch-to-buffer-prefers-purpose nil
+
+   dotspacemacs-maximize-window-keep-side-windows t
+
+   dotspacemacs-enable-load-hints nil
+
+   dotspacemacs-enable-package-quickstart nil
+
+   dotspacemacs-loading-progress-bar t
+
+   dotspacemacs-fullscreen-at-startup nil
+
+   dotspacemacs-fullscreen-use-non-native nil
+
+   dotspacemacs-maximized-at-startup t
+
+   dotspacemacs-undecorated-at-startup nil
+
+   dotspacemacs-active-transparency 90
+
+   dotspacemacs-inactive-transparency 90
+
+   dotspacemacs-background-transparency 90
+
+   dotspacemacs-show-transient-state-title t
+
+   dotspacemacs-show-transient-state-color-guide t
+
+   dotspacemacs-mode-line-unicode-symbols t
+
+   dotspacemacs-smooth-scrolling t
+
+   dotspacemacs-scroll-bar-while-scrolling t
+
+   dotspacemacs-line-numbers 'relative
+
+   dotspacemacs-folding-method 'evil
+
+   dotspacemacs-smartparens-strict-mode nil
+
+   dotspacemacs-activate-smartparens-mode t
+
+   dotspacemacs-smart-closing-parenthesis nil
+
+   dotspacemacs-highlight-delimiters 'all
+
+   dotspacemacs-enable-server nil
+
+   dotspacemacs-server-socket-dir nil
+
+   dotspacemacs-persistent-server nil
+
+   dotspacemacs-search-tools '("rg" "ag" "ack" "grep")
+
+   dotspacemacs-undo-system 'undo-fu
+
+   dotspacemacs-frame-title-format  "%b — %t"
+
+   dotspacemacs-icon-title-format nil
+
+   dotspacemacs-show-trailing-whitespace t
+
+   dotspacemacs-whitespace-cleanup nil
+
+   dotspacemacs-use-clean-aindent-mode t
+
+   dotspacemacs-use-SPC-as-y nil
+
+   dotspacemacs-swap-number-row nil
+
+   dotspacemacs-zone-out-when-idle nil
+
+   dotspacemacs-pretty-docs nil
+
+   dotspacemacs-home-shorten-agenda-source nil
+
+   dotspacemacs-byte-compile nil)
+
+  )
+
+(defun dotspacemacs/user-env ()
+  (spacemacs/load-spacemacs-env))
+
+(defun dotspacemacs/user-init ()
+
+  (setq configuration-layer--elpa-archives
+        '(("melpa-cn" . "http://mirrors.cloud.tencent.com/elpa/melpa/")
+          ("org-cn"   . "http://mirrors.cloud.tencent.com/elpa/org/")
+          ("gnu-cn"   . "http://mirrors.cloud.tencent.com/elpa/gnu/")))
+
+
+  (defun my-reload-dir-locals-for-all-buffer-in-this-directory ()
+    "For every buffer with the same `default-directory` as the current buffer's, reload dir-locals."
+    (interactive)
+    (let ((dir default-directory))
+      (dolist (buffer (buffer-list))
+        (with-current-buffer buffer
+          (when (equal default-directory dir)
+            (my-reload-dir-locals-for-current-buffer))))))
+
+  (add-hook 'emacs-lisp-mode-hook
+            (defun enable-autoreload-for-dir-locals ()
+              (when (and (buffer-file-name)
+                         (equal dir-locals-file
+                                (file-name-nondirectory (buffer-file-name))))
+                (add-hook 'after-save-hook
+                          'my-reload-dir-locals-for-all-buffer-in-this-directory
+                          nil t))))
+
+
+  ;; Увеличиваем порог GC до 100MB
+  (setq gc-cons-threshold (* 100 1024 1024))
+  (setq gc-cons-percentage 0.1)
+
+  ;; Увеличиваем лимит чтения данных от LSP (4MB)
+  (setq read-process-output-max (* 4 1024 1024))
+
+  ;; Ускоряем работу файловой системы
+  (setq auto-mode-case-fold nil)
+
+  ;; Отключаем лишние проверки файлов
+  (setq vc-handled-backends nil)
+
+  ;; Ускоряем работу с большими файлами
+  (setq large-file-warning-threshold (* 50 1024 1024))
+
+  )
+
+(defun dotspacemacs/user-config ()
+  (require 'sqlite3)
+  (require 'srefactor)
+  (require 'dap-gdb-lldb)
+  (require 'dap-cpptools)
+  (require 'dap-lldb)
+
+  (dap-gdb-lldb-setup)
+
+  (global-unset-key (kbd "<f2>"))
+  (global-unset-key (kbd "<f4>"))
+  (global-unset-key (kbd "C-S"))
+  ;; -------------------------- Привязки клавиш ----------------------------------
+
+  ;; Показать контекстную справку
+  (global-set-key (kbd "<S-f1>") 'lsp-ui-doc-glance)
+  ;; Привязать F2 к переходу к определению через LSP
+  (global-set-key (kbd "<f2>") 'lsp-find-definition)
+  ;; Привязать F4 к переключению между заголовочным и исходным файлом
+  (global-set-key (kbd "<f4>") 'ff-find-other-file)
+  ;; Найти все ссылки
+  (global-set-key (kbd "S-<f2>") 'lsp-find-references)
+  ;; Запустить отладку
+  (define-key evil-normal-state-map (kbd "<f5>") 'dap-debug)
+  ;; Вкл/Выкл точку останова
+  (define-key evil-normal-state-map (kbd "<f9>") 'dap-breakpoint-toggle)
+  ;; На шаг вперед
+  (define-key evil-normal-state-map (kbd "<f10>") 'dap-next)
+  ;; Шаг внутрь
+  (define-key evil-normal-state-map (kbd "<f11>") 'dap-step-in)
+
+  ;; ;; Дополнительные полезные привязки для C++
+  ;; (global-set-key (kbd "C-<f2>") 'lsp-find-implementation) ; Ctrl-F2 - найти реализацию
+  ;; (global-set-key (kbd "M-<f2>") 'lsp-rename)              ; Alt-F2 - переименование
+  ;; (global-set-key (kbd "S-<f4>") 'ff-find-other-file-other-window) ; в другом окне
+  ;; (global-set-key (kbd "C-<f4>") 'projectile-find-other-file)      ; через projectile
+
+  (use-package shift-text
+    :ensure t
+    :bind (("C-S-<down>" . shift-text-down)
+           ("C-S-<up>" . shift-text-up)
+           ("C-S-<right>" . shift-text-right)
+           ("C-S-<left>" . shift-text-left)))
+
+  (setq ff-always-try-to-create nil)
+
+  ;; Проверка доступности SQLite в Emacs
+  (defun check-sqlite-support ()
+    (interactive)
+    (if (fboundp 'sqlite-open)
+        (message "✅ SQLite support is available")
+      (message "❌ SQLite support NOT available - installing alternatives...")))
+
+  (check-sqlite-support)
+
+  (defun my/compilation-autoclose (buffer string)
+    "Closes the compilation window if compilation is successful."
+    (when (string-match-p "finished" string) ;; Check for successful completion message
+      (message "Compilation successful: closing window.")
+      (run-with-timer 3 nil 'delete-window (get-buffer-window buffer t))))
+
+  (setq compilation-finish-functions '(my/compilation-autoclose))
+
+  ;;-------------------------------------------
+  (defun my/create-class-files (class-name)
+    (interactive "sВведите имя класса: ")
+    (let* ((file-name-base class-name)  ;; имя файла без изменений
+           (class-name-corrected (concat (upcase (substring class-name 0 1))
+                                         (substring class-name 1)))  ;; имя класса с заглавной
+           (dir (file-name-directory (buffer-file-name)))
+           (h-file (concat dir file-name-base ".h"))
+           (cpp-file (concat dir file-name-base ".cpp"))
+           (guard-name (upcase (concat file-name-base "_H"))))
+      ;; Создаем и заполняем .h файл
+      (find-file h-file)
+      (insert (format "#ifndef %s\n#define %s\n\nclass %s {\npublic:\n   %s();\n   virtual ~%s();\n\nprivate:\n    \n};\n\n#endif // %s\n"
+                      guard-name guard-name class-name-corrected class-name-corrected class-name-corrected guard-name))
+      (save-buffer)
+      ;; Создаем и заполняем .cpp файл
+      (find-file cpp-file)
+      (insert (format "#include \"%s.h\"\n\n%s::%s() {\n    \n}\n\n%s::~%s() {\n    \n}\n"
+                      file-name-base class-name-corrected class-name-corrected class-name-corrected class-name-corrected))
+      (save-buffer)
+      ;; Возвращаемся в .h файл
+      (find-file h-file)))
+
+  (spacemacs/set-leader-keys "oc" 'my/create-class-files)
+
+  (with-eval-after-load 'cc-mode
+    (remove-hook 'c-mode-common-hook 'c-toggle-auto-newline))
+
+  (setq c-basic-offset 4)
+  (setq c-default-style "linux")
+
+  (setq dap-auto-configure-features '(sessions locals controls tooltip))
+
+  (with-eval-after-load 'lsp-mode
+    ;; Безопасное добавление сниппетов к выдаче LSP
+    (add-hook 'lsp-managed-mode-hook
+              (lambda ()
+                (when (bound-and-true-p company-backends)
+                  (make-local-variable 'company-backends)
+                  ;; Подмешиваем сниппеты к основному источнику lsp (company-capf)
+                  (setq company-backends
+                        (mapcar (lambda (backend)
+                                  (if (and (eq backend 'company-capf)
+                                           (not (and (listp backend) (memq 'company-yasnippet backend))))
+                                      '(company-capf :with company-yasnippet)
+                                    backend))
+                                company-backends))))))
+
+
+  )
+
+(defun dotspacemacs/emacs-custom-settings ()
+  (custom-set-variables
+   '(safe-local-variable-values '((helm-make-arguments . "-j16"))))
+  (custom-set-faces))
